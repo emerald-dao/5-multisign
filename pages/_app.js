@@ -11,7 +11,7 @@ function MyApp({ Component, pageProps }) {
         <main className='container mx-auto flex-1 p-5'>
           <Navbar />
           <Head>
-            <title>#-DAPPNAME</title>
+            <title>5-MULTISIGN</title>
             <meta name="description" content="Used by Emerald Academy" />
             <link rel="icon" href="/favicon.ico" />
           </Head>
