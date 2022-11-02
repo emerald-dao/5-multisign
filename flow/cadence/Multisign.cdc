@@ -9,9 +9,18 @@ pub contract Multisign {
   pub let TreasuryStoragePath: StoragePath
   pub let TreasuryPublicPath: PublicPath
 
-  pub struct PendingProposal {
+  pub struct interface Action {
     pub let id: UInt64
-    pub let amount: Fix64
+    pub let type: String
+    pub let amount: UFix64
+    pub let description: String
+    pub let proposedBy: Address
+  }
+
+  pub struct PendingProposal: Action {
+    pub let id: UInt64
+    pub let type: String
+    pub let amount: UFix64
     pub let description: String
     pub let timeProposed: UFix64
     pub let proposedBy: Address
@@ -26,8 +35,9 @@ pub contract Multisign {
       self.signers.append(by)
     }
 
-    init(id: UInt64,  amount: Fix64, description: String, proposedBy: Address, transferTo: Address) {
+    init(id: UInt64,  amount: UFix64, description: String, proposedBy: Address, transferTo: Address) {
       self.id = id
+      self.type = "Pending"
       self.amount = amount
       self.description = description
       self.timeProposed = getCurrentBlock().timestamp
@@ -38,9 +48,10 @@ pub contract Multisign {
     }
   }
 
-  pub struct CompletedProposal {
+  pub struct CompletedProposal: Action {
     pub let id: UInt64
-    pub let amount: Fix64
+    pub let type: String
+    pub let amount: UFix64
     pub let description: String
     pub let timeProposed: UFix64
     pub let proposedBy: Address
@@ -48,8 +59,9 @@ pub contract Multisign {
 
     pub let timeAccepted: UFix64
 
-    init(id: UInt64, amount: Fix64, description: String, timeProposed: UFix64, proposedBy: Address, transferTo: Address, timeAccepted: UFix64) {
+    init(id: UInt64, amount: UFix64, description: String, timeProposed: UFix64, proposedBy: Address, transferTo: Address, timeAccepted: UFix64) {
       self.id = id
+      self.type = "Completed"
       self.amount = amount
       self.description = description
       self.timeProposed = timeProposed
@@ -60,15 +72,19 @@ pub contract Multisign {
     }
   }
 
-  pub struct Deposit {
+  pub struct Deposit: Action {
+    pub let id: UInt64
+    pub let type: String
     pub let amount: UFix64
     pub let description: String
-    pub let donor: Address
+    pub let proposedBy: Address
 
-    init(amount: UFix64, description: String, donor: Address) {
+    init(id: UInt64, amount: UFix64, description: String, donor: Address) {
+      self.id = id
+      self.type = "Deposit"
       self.amount = amount
       self.description = description
-      self.donor = donor
+      self.proposedBy = donor
     }
   }
 
@@ -76,11 +92,11 @@ pub contract Multisign {
     pub let admins: [Address]
     pub let pendingProposals: {UInt64: PendingProposal}
     pub let completedProposals: {UInt64: CompletedProposal}
-    access(contract) fun createProposal(amount: Fix64, description: String, proposedBy: Address, transferTo: Address)
+    pub let deposits: {UInt64: Deposit}
+    pub let orderedActions: [{Action}]
+    access(contract) fun createProposal(amount: UFix64, description: String, proposedBy: Address, transferTo: Address)
     pub fun deposit(flowVault: @FlowToken.Vault, description: String, donor: Address)
     access(contract) fun getPendingProposalRef(proposalId: UInt64): &PendingProposal?
-    pub fun getPendingProposal(proposalId: UInt64): PendingProposal?
-    pub fun getCompletedProposal(proposalId: UInt64): CompletedProposal?
     pub fun getTreasuryBalance(): UFix64
   }
 
@@ -90,12 +106,11 @@ pub contract Multisign {
     pub let pendingProposals: {UInt64: PendingProposal}
     pub let completedProposals: {UInt64: CompletedProposal}
     pub let deposits: {UInt64: Deposit}
-    pub let orderedActions: [UInt64]
+    pub let orderedActions: [{Action}]
 
     pub fun proposeProposal(
       treasuryAddress: Address, 
-      proposalId: UInt64, 
-      amount: Fix64, 
+      amount: UFix64, 
       description: String,
       transferTo: Address
     ) {
@@ -104,8 +119,8 @@ pub contract Multisign {
       treasuryPublic.createProposal(amount: amount, description: description, proposedBy: self.owner!.address, transferTo: transferTo)
     }
 
-    access(contract) fun createProposal(amount: Fix64, description: String, proposedBy: Address, transferTo: Address) {
-      self.pendingProposals[Multisign.totalActions] = PendingProposal(
+    access(contract) fun createProposal(amount: UFix64, description: String, proposedBy: Address, transferTo: Address) {
+      let proposal = PendingProposal(
         id: Multisign.totalActions,
         amount: amount, 
         description: description, 
@@ -113,17 +128,25 @@ pub contract Multisign {
         transferTo: transferTo
       )
 
+      self.pendingProposals[Multisign.totalActions] = proposal
+      self.orderedActions.append(proposal)
+
       Multisign.totalActions = Multisign.totalActions + 1
     }
 
     pub fun deposit(flowVault: @FlowToken.Vault, description: String, donor: Address) {
-      self.deposits[Multisign.totalActions] = Deposit(
+      let deposit = Deposit(
+        id: Multisign.totalActions, 
         amount: flowVault.balance,
         description: description,
         donor: donor
       )
+      
+      self.deposits[Multisign.totalActions] = deposit
+      self.orderedActions.append(deposit)
 
       self.flowVault.deposit(from: <- flowVault)
+      Multisign.totalActions = Multisign.totalActions + 1
     }
 
     pub fun signProposal(treasuryAddress: Address, proposalId: UInt64) {
@@ -144,7 +167,7 @@ pub contract Multisign {
 
     access(self) fun completeAction(proposalId: UInt64) {
       let proposal = self.pendingProposals.remove(key: proposalId)!
-      self.completedProposals[proposal.id] = CompletedProposal(
+      let completedProposal = CompletedProposal(
         id: proposal.id, 
         amount: proposal.amount, 
         description: proposal.description, 
@@ -153,6 +176,9 @@ pub contract Multisign {
         transferTo: proposal.transferTo,
         timeAccepted: getCurrentBlock().timestamp
       )
+      self.completedProposals[proposal.id] = completedProposal
+      self.orderedActions.append(completedProposal)
+
       let receiverFlowVault = getAccount(proposal.transferTo).getCapability(/public/flowTokenReceiver)
                         .borrow<&FlowToken.Vault{FungibleToken.Receiver}>()!
       receiverFlowVault.deposit(from: <- self.flowVault.withdraw(amount: proposal.amount))
@@ -160,14 +186,6 @@ pub contract Multisign {
 
     access(contract) fun getPendingProposalRef(proposalId: UInt64): &PendingProposal? {
       return &self.pendingProposals[proposalId] as &PendingProposal?
-    }
-
-    pub fun getPendingProposal(proposalId: UInt64): PendingProposal? {
-      return self.pendingProposals[proposalId]
-    }
-
-    pub fun getCompletedProposal(proposalId: UInt64): CompletedProposal? {
-      return self.completedProposals[proposalId]
     }
 
     pub fun getTreasuryBalance(): UFix64 {
@@ -192,10 +210,17 @@ pub contract Multisign {
     }
   }
 
+  pub fun createTreasury(admins: [Address]): @Treasury {
+    return <- create Treasury(admins: admins)
+  }
+
   init() {
-    self.totalProposals = 0
+    self.totalActions = 0
     self.TreasuryStoragePath = /storage/EmeraldAcademyMultisignTreasury
     self.TreasuryPublicPath = /public/EmeraldAcademyMultisignTreasury
+
+    self.account.save(<- Multisign.createTreasury(admins: [self.account.address]), to: Multisign.TreasuryStoragePath)
+    self.account.link<&Multisign.Treasury{Multisign.TreasuryPublic}>(Multisign.TreasuryPublicPath, target: Multisign.TreasuryStoragePath)
   }
 
 }

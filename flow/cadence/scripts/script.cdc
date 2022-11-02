@@ -1,5 +1,0 @@
-
-
-pub fun main() {
-    
-}
