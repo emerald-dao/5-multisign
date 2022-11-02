@@ -90,7 +90,7 @@ export default function Home() {
           {treasuryInfo.orderedActions.slice(0).reverse().map(action => {
             if (action.type == "Deposit") {
               return (
-                <Link href='/did' key={action.id}>
+                <Link href={`/deposit/${action.id}`} key={action.id}>
                   <a className='rounded-lg bg-[#00344B] text-white hover:bg-[#0f4962] flex cursor-pointer items-center py-4 px-9 justify-between'>
                     <div className='flex items-center space-x-3'>
                       <p className='text-lg font-semibold text-gray-400'>#{action.id}</p>
@@ -106,7 +106,7 @@ export default function Home() {
               )
             } else if (action.type == "Completed") {
               return (
-                <Link href='/wid' key={action.id}>
+                <Link href={`/withdraw/${action.id}`} key={action.id}>
                   <a className='rounded-lg bg-[#00344B] text-white hover:bg-[#0f4962] flex cursor-pointer items-center py-4 px-9 justify-between'>
                     <div className='flex items-center space-x-3'>
                       <p className='text-lg font-semibold text-gray-400'>#{action.id}</p>
