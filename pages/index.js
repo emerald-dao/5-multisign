@@ -87,10 +87,10 @@ export default function Home() {
             <h1 className='text-[#2bbc9f] text-lg'>Transaction History</h1>
           </div>
 
-          {treasuryInfo.orderedActions.slice(0).reverse().map(action => {
+          {treasuryInfo.orderedActions.slice(0).reverse().map((action, index) => {
             if (action.type == "Deposit") {
               return (
-                <Link href={`/deposit/${action.id}`} key={action.id}>
+                <Link href={`/deposit/${action.id}`} key={index}>
                   <a className='rounded-lg bg-[#00344B] text-white hover:bg-[#0f4962] flex cursor-pointer items-center py-4 px-9 justify-between'>
                     <div className='flex items-center space-x-3'>
                       <p className='text-lg font-semibold text-gray-400'>#{action.id}</p>
@@ -100,13 +100,13 @@ export default function Home() {
                         {action.description}
                       </p>
                     </div>
-                    <div className='font-semibold text-[#2bbc9f]'>+ {action.amount} FLOW</div>
+                    <div className='font-semibold text-[#2bbc9f]'>+ {parseFloat(action.amount).toFixed(3)} FLOW</div>
                   </a>
                 </Link>
               )
             } else if (action.type == "Completed") {
               return (
-                <Link href={`/withdraw/${action.id}`} key={action.id}>
+                <Link href={`/withdraw/${action.id}`} key={index}>
                   <a className='rounded-lg bg-[#00344B] text-white hover:bg-[#0f4962] flex cursor-pointer items-center py-4 px-9 justify-between'>
                     <div className='flex items-center space-x-3'>
                       <p className='text-lg font-semibold text-gray-400'>#{action.id}</p>
@@ -116,23 +116,25 @@ export default function Home() {
                         {action.description}
                       </p>
                     </div>
-                    <div className='font-semibold text-red-500'>- {action.amount} FLOW</div>
+                    <div className='font-semibold text-red-500'>- {parseFloat(action.amount).toFixed(3)} FLOW</div>
                   </a>
                 </Link>
               )
             } else if (action.type == "Pending") {
               return (
-                <div key={action.id} className='rounded-lg bg-[#00344B] text-white hover:bg-[#0f4962] flex cursor-pointer items-center py-4 px-9 justify-between'>
-                  <div className='flex items-center space-x-3'>
-                    <p className='text-lg font-semibold text-gray-400'>#{action.id}</p>
+                <Link href={`/withdraw/${action.id}`} key={index}>
+                  <div className='rounded-lg bg-[#00344B] text-white hover:bg-[#0f4962] flex cursor-pointer items-center py-4 px-9 justify-between'>
+                    <div className='flex items-center space-x-3'>
+                      <p className='text-lg font-semibold text-gray-400'>#{action.id}</p>
 
-                    <h2 className='text-xl font-semibold text-gray-200'>{action.proposedBy}</h2>
-                    <p className='text-sm text-gray-400 pl-10 truncate ...  w-1/2'>
-                      {action.description}
-                    </p>
+                      <h2 className='text-xl font-semibold text-gray-200'>{action.proposedBy}</h2>
+                      <p className='text-sm text-gray-400 pl-10 truncate ...  w-1/2'>
+                        {action.description}
+                      </p>
+                    </div>
+                    <div className='font-semibold text-gray-400'>Pending</div>
                   </div>
-                  <div className='font-semibold text-gray-400'>Pending</div>
-                </div>
+                </Link>
               )
             }
           })}

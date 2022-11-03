@@ -45,7 +45,7 @@ export default function WithdrawModal({ refreshInfo }) {
       `,
       args: (arg, t) => [
         arg('0xf8d6e0586b0a20c7', t.Address),
-        arg(parseFloat(amount).toFixed(2), t.UFix64),
+        arg(parseFloat(amount).toFixed(3), t.UFix64),
         arg(description, t.String),
         arg(transferTo, t.Address)
       ],

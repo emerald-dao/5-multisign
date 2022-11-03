@@ -22,7 +22,7 @@ export default function Navbar() {
           {!balance ? null :
             <div className='flex space-x-4 items-center'>
               <h1 className='text-[#38E8C6]'>Balance: </h1>
-              <h1 className='border px-7 text-center text-[#38E8C6] text-sm py-1 rounded-xl border-[#38E8C6] w-36'>{parseFloat(balance).toFixed(2)}</h1>
+              <h1 className='border px-7 text-center text-[#38E8C6] text-sm py-1 rounded-xl border-[#38E8C6] w-36'>{parseFloat(balance).toFixed(3)}</h1>
             </div>
           }
         </div>

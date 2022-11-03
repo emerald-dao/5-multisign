@@ -1,5 +1,5 @@
 import * as fcl from "@onflow/fcl";
-import { useAuth } from "../contexts/AuthContext";
+import Link from "next/link";
 import { useState, useEffect } from 'react';
 
 export default function Admin() {
@@ -65,15 +65,17 @@ export default function Admin() {
             {Object.keys(treasuryInfo.pendingProposals).map(proposalId => {
               const proposal = treasuryInfo.pendingProposals[proposalId];
               return (
-                <div key={proposalId} className='rounded-lg bg-[#00344B] text-white hover:bg-[#0f4962] flex cursor-pointer items-center py-4 px-9 justify-between'>
-                  <div className='flex items-center space-x-3'>
-                    <p className='text-lg font-semibold text-gray-400'>#{proposal.id}</p>
-                    <h2 className='text-xl font-semibold text-gray-200'>{proposal.proposedBy}</h2>
-                    <p className='text-sm text-gray-400 pl-10 truncate ...  w-1/2'>
-                      {proposal.description}
-                    </p>
+                <Link href={`/withdraw/${proposalId}`}>
+                  <div key={proposalId} className='rounded-lg bg-[#00344B] text-white hover:bg-[#0f4962] flex cursor-pointer items-center py-4 px-9 justify-between'>
+                    <div className='flex items-center space-x-3'>
+                      <p className='text-lg font-semibold text-gray-400'>#{proposal.id}</p>
+                      <h2 className='text-xl font-semibold text-gray-200'>{proposal.proposedBy}</h2>
+                      <p className='text-sm text-gray-400 pl-10 truncate ...  w-1/2'>
+                        {proposal.description}
+                      </p>
+                    </div>
                   </div>
-                </div>
+                </Link>
               )
             })}
           </div>

@@ -25,7 +25,6 @@ pub contract Multisign {
     pub let timeProposed: UFix64
     pub let proposedBy: Address
     pub let transferTo: Address
-
     pub let signers: [Address]
 
     access(contract) fun sign(by: Address) {
@@ -43,7 +42,6 @@ pub contract Multisign {
       self.timeProposed = getCurrentBlock().timestamp
       self.proposedBy = proposedBy
       self.transferTo = transferTo
-
       self.signers = []
     }
   }
@@ -56,10 +54,11 @@ pub contract Multisign {
     pub let timeProposed: UFix64
     pub let proposedBy: Address
     pub let transferTo: Address
+    pub let signers: [Address]
 
     pub let timeAccepted: UFix64
 
-    init(id: UInt64, amount: UFix64, description: String, timeProposed: UFix64, proposedBy: Address, transferTo: Address, timeAccepted: UFix64) {
+    init(id: UInt64, amount: UFix64, description: String, timeProposed: UFix64, proposedBy: Address, transferTo: Address, signers: [Address], timeAccepted: UFix64) {
       self.id = id
       self.type = "Completed"
       self.amount = amount
@@ -67,6 +66,7 @@ pub contract Multisign {
       self.timeProposed = timeProposed
       self.proposedBy = proposedBy
       self.transferTo = transferTo
+      self.signers = signers
 
       self.timeAccepted = timeAccepted
     }
@@ -174,6 +174,7 @@ pub contract Multisign {
         timeProposed: proposal.timeProposed, 
         proposedBy: proposal.proposedBy, 
         transferTo: proposal.transferTo,
+        signers: proposal.signers,
         timeAccepted: getCurrentBlock().timestamp
       )
       self.completedProposals[proposal.id] = completedProposal
