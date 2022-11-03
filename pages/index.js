@@ -66,7 +66,7 @@ export default function Home() {
           {treasuryInfo.admins.includes(user.addr) ?
             <Link href='/admin'>
               <a className='text-lg font-semibold text-green-400 justify-end flex'>
-                <p>View Pending Requests</p>
+                <p>View Admin Dashboard</p>
               </a>
             </Link>
             : null}

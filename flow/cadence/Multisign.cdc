@@ -185,6 +185,10 @@ pub contract Multisign {
       receiverFlowVault.deposit(from: <- self.flowVault.withdraw(amount: proposal.amount))
     }
 
+    pub fun addSigner(admin: Address) {
+      self.admins.append(admin)
+    }
+
     access(contract) fun getPendingProposalRef(proposalId: UInt64): &PendingProposal? {
       return &self.pendingProposals[proposalId] as &PendingProposal?
     }
