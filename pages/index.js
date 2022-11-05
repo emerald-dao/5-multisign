@@ -70,7 +70,7 @@ export default function Home() {
               </a>
             </Link>
             : null}
-          <div className='rounded-lg h-56 flex flex-col justify-between p-4 bg-[#00344B] shadow-lg shadow-blue-400/20'>
+          <div className='rounded-lg max-h-max flex flex-col justify-between p-4 bg-[#00344B] shadow-lg shadow-blue-400/20 space-y-10'>
             <div className='flex justify-between'>
               <div className='pl-4 '>
                 <h1 className='text-gray-300 text-sm'>Total Balance</h1>
