@@ -59,7 +59,17 @@ export default function Admin() {
     return (
       <div className='flex justify-center pt-20 '>
         <div className='w-[70%] space-y-10'>
-          <h1 className='text-2xl text-gray-300'>Treasury Withdrawal Requests</h1>
+          <div className="flex justify-between">
+            <h1 className='text-2xl text-gray-300'>Treasury Withdrawal Requests</h1>
+            <button className="px-4 py-2 bg-blue-100 text-blue-900 font-medium rounded-lg">Add admin</button>
+          </div>
+          <div className="space-y-2">
+            <h1 className="text-[#38E8C6] pl-3">ADMINS</h1>
+            <div className="rounded-lg  px-5 py-4 text-white bg-[#031523] flex space-x-4 text-sm">
+              <p className="text-[#38E8C6] border max-w-max px-2 rounded-full border-[#38E8C6]">0xf8d6e0586b0a20c7</p>
+              <p className="text-[#38E8C6] border max-w-max px-2 rounded-full border-[#38E8C6]">0xf8d6e0586b0a20c7</p>
+            </div>
+          </div>
 
           <div className='flex flex-col space-y-5'>
             {Object.keys(treasuryInfo.pendingProposals).map(proposalId => {
