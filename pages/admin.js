@@ -1,6 +1,7 @@
 import * as fcl from "@onflow/fcl";
 import Link from "next/link";
 import { useState, useEffect } from 'react';
+import AddAdminModal from "../components/AddAdmin";
 
 export default function Admin() {
   const [treasuryInfo, setTreasuryInfo] = useState({});
@@ -61,7 +62,7 @@ export default function Admin() {
         <div className='w-[70%] space-y-10'>
           <div className="flex justify-between">
             <h1 className='text-2xl text-gray-300'>Treasury Withdrawal Requests</h1>
-            <button className="px-4 py-2 bg-blue-100 text-blue-900 font-medium rounded-lg">Add admin</button>
+            <AddAdminModal />
           </div>
           <div className="space-y-2">
             <h1 className="text-[#38E8C6] pl-3">ADMINS</h1>
