@@ -154,6 +154,13 @@ export default function WithdrawInfo() {
                 <p className='text-gray-300 opacity-75'>Request by: {withdrawInfo.proposedBy}</p>
               </div>
             </div>
+            <div className="space-y-2 pt-7">
+              <h1 className="text-gray-300 pl-1">Signed By:</h1>
+              <div className="rounded-xl  px-3 py-4 text-white bg-[#031523] flex space-x-4 text-xs">
+                <p className="text-[#38E8C6] border max-w-max px-2 rounded-full border-[#38E8C6]">0xf8d6e0586b0a20c7</p>
+                <p className="text-[#38E8C6] border max-w-max px-2 rounded-full border-[#38E8C6]">0xf8d6e0586b0a20c7</p>
+              </div>
+          </div>
             <div className='flex items-center pt-8 space-x-3'>
               <p className='text-gray-300'>Amount requested:</p>
               <p className='text-[#2bbc9f]'>{parseFloat(withdrawInfo.amount).toFixed(3)} FLOW</p>
