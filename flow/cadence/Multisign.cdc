@@ -95,6 +95,7 @@ pub contract Multisign {
     pub let deposits: {UInt64: Deposit}
     pub let orderedActions: [{Action}]
     access(contract) fun createProposal(amount: UFix64, description: String, proposedBy: Address, transferTo: Address)
+    access(contract) fun completeAction(proposalId: UInt64)
     pub fun deposit(flowVault: @FlowToken.Vault, description: String, donor: Address)
     access(contract) fun getPendingProposalRef(proposalId: UInt64): &PendingProposal?
     pub fun getTreasuryBalance(): UFix64
@@ -159,13 +160,13 @@ pub contract Multisign {
                         ?? panic("This proposal does not exist.")
       pendingProposalRef.sign(by: self.owner!.address)
 
-      if pendingProposalRef.signers.length == self.admins.length {
+      if pendingProposalRef.signers.length == treasuryPublic.admins.length {
         // Complete the action
-        self.completeAction(proposalId: proposalId)
+        treasuryPublic.completeAction(proposalId: proposalId)
       }
     }
 
-    access(self) fun completeAction(proposalId: UInt64) {
+    access(contract) fun completeAction(proposalId: UInt64) {
       let proposal = self.pendingProposals.remove(key: proposalId)!
       let completedProposal = CompletedProposal(
         id: proposal.id, 

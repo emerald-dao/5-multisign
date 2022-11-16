@@ -53,7 +53,7 @@ export default function DepositModal({ refreshInfo }) {
       }
       `,
       args: (arg, t) => [
-        arg('0xf8d6e0586b0a20c7', t.Address),
+        arg(process.env.NEXT_PUBLIC_CONTRACT_ADDRESS, t.Address),
         arg(parseFloat(amount).toFixed(3), t.UFix64),
         arg(description, t.String)
       ],
@@ -125,7 +125,7 @@ export default function DepositModal({ refreshInfo }) {
                   <div className="mt-2 text-left flex flex-col items-center">
                     <div className="flex flex-col">
                       <label className="text-gray-300 text-xs mb-3"> Amount</label>
-                      <input type="text" placeholder='000'
+                      <input type="text" placeholder='10.0'
                         className='px-7 py-2 focus:outline-none text-gray-200 focus:border-[#38E8C6] 
                         bg-[#00344B] border rounded-lg  border-gray-400' onChange={(e) => setAmount(e.target.value)} />
                     </div>

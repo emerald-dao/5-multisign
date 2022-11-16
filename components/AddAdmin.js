@@ -102,7 +102,7 @@ export default function AddAdminModal({ refreshInfo }) {
                   <div className="mt-2 text-left flex flex-col items-center px-10">
                     <div className="flex flex-col w-full">
                       <label className="text-gray-300 text-xs mb-3"> Address</label>
-                      <input type="text" placeholder='0x01...'
+                      <input type="text" placeholder='0xf8d6e0586b0a20c7'
                         className='px-7 py-2 focus:outline-none text-gray-200 focus:border-[#38E8C6] 
                         bg-[#00344B] border rounded-lg  border-gray-400' onChange={(e) => setNewAdmin(e.target.value)} />
                     </div>

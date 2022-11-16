@@ -28,7 +28,7 @@ export default function DepositInfo() {
       }
       `,
       args: (arg, t) => [
-        arg('0xf8d6e0586b0a20c7', t.Address),
+        arg(process.env.NEXT_PUBLIC_CONTRACT_ADDRESS, t.Address),
         arg(proposalId, t.UInt64)
       ]
     });

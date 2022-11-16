@@ -50,7 +50,7 @@ export default function Admin() {
         }
       }
       `,
-      args: (arg, t) => [arg('0xf8d6e0586b0a20c7', t.Address)]
+      args: (arg, t) => [arg(process.env.NEXT_PUBLIC_CONTRACT_ADDRESS, t.Address)]
     });
 
     console.log(result);

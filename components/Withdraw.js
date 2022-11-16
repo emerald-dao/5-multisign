@@ -44,7 +44,7 @@ export default function WithdrawModal({ refreshInfo }) {
       }
       `,
       args: (arg, t) => [
-        arg('0xf8d6e0586b0a20c7', t.Address),
+        arg(process.env.NEXT_PUBLIC_CONTRACT_ADDRESS, t.Address),
         arg(parseFloat(amount).toFixed(3), t.UFix64),
         arg(description, t.String),
         arg(transferTo, t.Address)
@@ -116,13 +116,13 @@ export default function WithdrawModal({ refreshInfo }) {
                   <div className="mt-2 text-left flex flex-col items-center px-3">
                     <div className="flex flex-col w-full pt-6">
                       <label className="text-gray-300 text-xs mb-3"> Amount</label>
-                      <input type="text" placeholder='000'
+                      <input type="text" placeholder='10.0'
                         className='px-7 py-2 focus:outline-none text-gray-200 focus:border-[#38E8C6] 
                         bg-[#00344B] border rounded-lg  border-gray-400' onChange={(e) => setAmount(e.target.value)} />
                     </div>
                     <div className="flex flex-col pt-6 w-full">
                       <label className="text-gray-300 text-xs mb-3"> Beneficiary</label>
-                      <input type="text" placeholder='0x001'
+                      <input type="text" placeholder='0xf8d6e0586b0a20c7'
                         className='px-7 py-2 focus:outline-none text-gray-200 focus:border-[#38E8C6] 
                         bg-[#00344B] border rounded-lg  border-gray-400' onChange={(e) => setTransferTo(e.target.value)} />
                     </div>
