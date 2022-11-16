@@ -1,8 +1,6 @@
 import Multisign from "../Multisign.cdc"
 
-transaction(
-  newAdmin: Address
-) {
+transaction(newAdmin: Address) {
 
     let MyTreasury: &Multisign.Treasury
 

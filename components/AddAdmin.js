@@ -3,9 +3,49 @@ import { Fragment, useState } from 'react'
 import * as fcl from "@onflow/fcl";
 import { useAuth } from '../contexts/AuthContext';
 
-export default function AddAdminModal() {
+export default function AddAdminModal({ refreshInfo }) {
   let [isOpen, setIsOpen] = useState(false)
+  const [processing, setProcessing] = useState(false);
+  const [newAdmin, setNewAdmin] = useState('');
 
+  async function addAdmin() {
+    setProcessing(true);
+    const transactionId = await fcl.mutate({
+      cadence: `
+      import Multisign from 0xDeployer
+
+      transaction(newAdmin: Address) {
+
+          let MyTreasury: &Multisign.Treasury
+
+          prepare(signer: AuthAccount) {
+            if signer.borrow<&Multisign.Treasury>(from: Multisign.TreasuryStoragePath) == nil {
+                  signer.save(<- Multisign.createTreasury(admins: [signer.address]), to: Multisign.TreasuryStoragePath)
+                  signer.link<&Multisign.Treasury{Multisign.TreasuryPublic}>(Multisign.TreasuryPublicPath, target: Multisign.TreasuryStoragePath)
+            }
+
+            self.MyTreasury = signer.borrow<&Multisign.Treasury>(from: Multisign.TreasuryStoragePath)!
+          }
+
+          execute {
+            self.MyTreasury.addSigner(admin: newAdmin)
+          }
+      }
+      `,
+      args: (arg, t) => [
+        arg(newAdmin, t.Address)
+      ],
+      payer: fcl.authz,
+      proposer: fcl.authz,
+      authorizations: [fcl.authz],
+      limit: 999
+    });
+
+    await fcl.tx(transactionId).onceSealed();
+    setProcessing(false);
+    closeModal();
+    refreshInfo();
+  }
 
   function closeModal() {
     setIsOpen(false);
@@ -64,7 +104,7 @@ export default function AddAdminModal() {
                       <label className="text-gray-300 text-xs mb-3"> Address</label>
                       <input type="text" placeholder='0x01...'
                         className='px-7 py-2 focus:outline-none text-gray-200 focus:border-[#38E8C6] 
-                        bg-[#00344B] border rounded-lg  border-gray-400' />
+                        bg-[#00344B] border rounded-lg  border-gray-400' onChange={(e) => setNewAdmin(e.target.value)} />
                     </div>
                   </div>
 
@@ -72,9 +112,9 @@ export default function AddAdminModal() {
                     <button
                       type="button"
                       className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-6 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      onClick={closeModal}
+                      onClick={addAdmin}
                     >
-                      Add Admin
+                      {processing ? 'Adding Admin...' : 'Add Admin'}
                     </button>
                   </div>
 

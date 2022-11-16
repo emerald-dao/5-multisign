@@ -65,7 +65,7 @@ export default function DepositModal({ refreshInfo }) {
 
     await fcl.tx(transactionId).onceSealed();
     setProcessing(false);
-    setIsOpen(false);
+    closeModal();
     refreshInfo();
     getBalance();
   }
@@ -131,7 +131,7 @@ export default function DepositModal({ refreshInfo }) {
                     </div>
                     <div className="flex flex-col pt-8">
                       <label className="text-gray-300 text-xs mb-3"> Description</label>
-                      <input type="text" placeholder='Money to to buy...'
+                      <input type="text" placeholder='A gift for the treasury...'
                         className='px-7 py-3  focus:outline-none text-gray-200 focus:border-[#38E8C6] 
                         bg-[#00344B] border rounded-lg  border-gray-400' onChange={(e) => setDescription(e.target.value)} />
                     </div>

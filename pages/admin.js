@@ -2,9 +2,11 @@ import * as fcl from "@onflow/fcl";
 import Link from "next/link";
 import { useState, useEffect } from 'react';
 import AddAdminModal from "../components/AddAdmin";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Admin() {
   const [treasuryInfo, setTreasuryInfo] = useState({});
+  const { user } = useAuth();
 
   useEffect(() => {
     getTreasuryInfo();
@@ -57,17 +59,25 @@ export default function Admin() {
   }
 
   if (treasuryInfo.balance) {
+    if (!treasuryInfo.admins.includes(user.addr)) {
+      return (
+        <div className='flex justify-center pt-16 text-white'>
+          You are not an Admin of this treasury.
+        </div>
+      )
+    }
     return (
       <div className='flex justify-center pt-16 '>
         <div className='w-[70%] space-y-10'>
           <div className="space-y-2 pb-3">
             <div className="flex justify-between items-center pb-2">
               <h1 className="text-gray-300 pl-1 text-xl">Current Admins</h1>
-              <AddAdminModal />
+              <AddAdminModal refreshInfo={getTreasuryInfo} />
             </div>
             <div className="rounded-lg  px-5 py-4 text-white bg-[#031523] flex space-x-4 text-sm">
-              <p className="text-[#38E8C6] border max-w-max px-2 rounded-full border-[#38E8C6]">0xf8d6e0586b0a20c7</p>
-              <p className="text-[#38E8C6] border max-w-max px-2 rounded-full border-[#38E8C6]">0xf8d6e0586b0a20c7</p>
+              {treasuryInfo.admins.map(admin => (
+                <p key={admin} className="text-[#38E8C6] bg-[#03152372]  max-w-max px-4 py-2 rounded-full">{admin}</p>
+              ))}
             </div>
           </div>
           <div className="flex justify-between">

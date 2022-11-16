@@ -186,6 +186,9 @@ pub contract Multisign {
     }
 
     pub fun addSigner(admin: Address) {
+      pre {
+        !self.admins.contains(admin): "This is already an Admin of the treasury."
+      }
       self.admins.append(admin)
     }
 

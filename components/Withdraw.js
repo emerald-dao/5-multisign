@@ -57,7 +57,7 @@ export default function WithdrawModal({ refreshInfo }) {
 
     await fcl.tx(transactionId).onceSealed();
     setProcessing(false);
-    setIsOpen(false);
+    closeModal();
     refreshInfo();
   }
 

@@ -141,7 +141,7 @@ export default function WithdrawInfo() {
     getWithdrawInfo();
   }
 
-  if (withdrawInfo.id) {
+  if (withdrawInfo.id && treasuryInfo.balance) {
     return (
       <div className='flex justify-center pt-20 '>
         <div className='w-[70%] space-y-10 flex justify-center'>
@@ -157,10 +157,11 @@ export default function WithdrawInfo() {
             <div className="space-y-2 pt-7">
               <h1 className="text-gray-300 pl-1">Signed By:</h1>
               <div className="rounded-xl  px-3 py-4 text-white bg-[#031523] flex space-x-4 text-xs">
-                <p className="text-[#38E8C6] border max-w-max px-2 rounded-full border-[#38E8C6]">0xf8d6e0586b0a20c7</p>
-                <p className="text-[#38E8C6] border max-w-max px-2 rounded-full border-[#38E8C6]">0xf8d6e0586b0a20c7</p>
+                {withdrawInfo.signers.map(signer => (
+                  <p key={signer} className="text-[#38E8C6] border max-w-max px-2 rounded-full border-[#38E8C6]">{signer}</p>
+                ))}
               </div>
-          </div>
+            </div>
             <div className='flex items-center pt-8 space-x-3'>
               <p className='text-gray-300'>Amount requested:</p>
               <p className='text-[#2bbc9f]'>{parseFloat(withdrawInfo.amount).toFixed(3)} FLOW</p>
@@ -174,11 +175,11 @@ export default function WithdrawInfo() {
               <p className='text-gray-400'>{withdrawInfo.description}</p>
             </div>
 
-            {withdrawInfo.type === 'Pending' && treasuryInfo.admins.includes(user.addr) ?
+            {withdrawInfo.type === 'Pending' && treasuryInfo.admins.includes(user.addr) && !withdrawInfo.signers.includes(user.addr) ?
               <div className='space-x-3 pt-7 flex'>
                 <button className='rounded-lg w-full py-2 bg-[#2bbc9f] text-white' onClick={signProposal}>{processing ? 'Signing Request...' : 'Sign Request'}</button>
               </div>
-              : withdrawInfo.type === 'Pending' ?
+              : withdrawInfo.type === 'Pending' && !treasuryInfo.admins.includes(user.addr) ?
                 <div className='space-x-3 pt-7 flex'>
                   <button className='disabled rounded-lg w-full py-2 bg-[red] text-white'>You are not an admin of this treasury.</button>
                 </div>
