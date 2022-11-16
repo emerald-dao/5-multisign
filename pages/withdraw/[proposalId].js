@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from "../../contexts/AuthContext";
 
 export default function WithdrawInfo() {
-  const { user } = useAuth();
+  const { user, getBalance } = useAuth();
   const router = useRouter();
   const { proposalId } = router.query;
   const [withdrawInfo, setWithdrawInfo] = useState({});
@@ -139,6 +139,7 @@ export default function WithdrawInfo() {
     await fcl.tx(transactionId).onceSealed();
     setProcessing(false);
     getWithdrawInfo();
+    getBalance();
   }
 
   if (withdrawInfo.id && treasuryInfo.balance) {
