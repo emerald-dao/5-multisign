@@ -58,7 +58,7 @@ export default function DepositInfo() {
 
             </div>
 
-            <div className='flex items-center pt-8 space-x-3'>
+            <div className='flex items-center space-x-3'>
               <p className='text-gray-300'>Amount Deposited:</p>
               <p className='text-[#2bbc9f]'>{depositInfo.amount} FLOW</p>
             </div>
@@ -67,8 +67,7 @@ export default function DepositInfo() {
               <p className='text-[#2bbc9f]'>{depositInfo.proposedBy}</p>
             </div>
             <div className='pt-8 space-y-3'>
-              <p className='text-gray-300'>Description:</p>
-              <p className='text-gray-400'>{depositInfo.description}</p>
+              <p className='text-gray-300'>Description: <span className='text-gray-400'>{depositInfo.description}</span></p>
             </div>
           </div>
         </div>

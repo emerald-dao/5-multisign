@@ -31,11 +31,26 @@
 		"emulator-account": {
 			"address": "f8d6e0586b0a20c7",
 			"key": "dd6e0fd35190ee5aba55bb3c2ec1630c8a8fe75ef7e9a59f979e9e3a0518edb6"
+		},
+		"testnet-account": {
+			"address": "0xd7d74bab334c1f53",
+			"key": {
+				"type": "hex",
+				"index": 0,
+				"signatureAlgorithm": "ECDSA_P256",
+				"hashAlgorithm": "SHA3_256",
+				"privateKey": "6ca64a7560a5421cdf6db2100e284e788d5600c3831674c3fd7c4e771d83bea9"
+			}
 		}
 	},
 	"deployments": {
 		"emulator": {
 			"emulator-account": [
+				"Multisign"
+			]
+		},
+		"testnet": {
+			"testnet-account": [
 				"Multisign"
 			]
 		}

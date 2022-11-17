@@ -172,8 +172,7 @@ export default function WithdrawInfo() {
               <p className='text-[#2bbc9f]'>{withdrawInfo.transferTo}</p>
             </div>
             <div className='pt-8 space-y-3'>
-              <p className='text-gray-300'>Description:</p>
-              <p className='text-gray-400'>{withdrawInfo.description}</p>
+              <p className='text-gray-300'>Description: <span className='text-gray-400'>{withdrawInfo.description}</span></p>
             </div>
 
             {withdrawInfo.type === 'Pending' && treasuryInfo.admins.includes(user.addr) && !withdrawInfo.signers.includes(user.addr) ?

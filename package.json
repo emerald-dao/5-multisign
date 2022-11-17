@@ -1,5 +1,5 @@
 {
-  "name": "5-Multisign",
+  "name": "5-multisign",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "mint": "node ./actions/mint_tokens.js"
+    "sign": "node ./actions/sign_request.js"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.3",
@@ -15,7 +15,6 @@
     "dotenv": "^16.0.1",
     "elliptic": "^6.5.4",
     "next": "12.1.6",
-    "nft.storage": "^7.0.0",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "sha3": "^2.1.4"
