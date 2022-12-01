@@ -226,7 +226,7 @@ Let's try out our application on testnet:
 
 # ⚔️ Side Quests
 
-> 🏃 More challenges coming soon...
+> 🏃 Head to your next challenge [here](https://academy.ecdao.org/challenges/groups).
 
 > 💬 Meet other builders working on this challenge and get help in the [💎 Emerald City Discord](https://discord.gg/emeraldcity)!
 
