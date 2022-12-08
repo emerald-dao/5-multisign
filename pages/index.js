@@ -75,7 +75,7 @@ export default function Home() {
               <div className='pl-4 '>
                 <h1 className='text-gray-300 text-sm'>Total Balance</h1>
                 <h1 className='text-green-400 text-3xl pt-3'>{parseFloat(treasuryInfo.balance).toFixed(3)} FLOW</h1>
-                <p className='text-gray-400 pl-1'>($320,000)</p>
+                <p className='text-gray-400 pl-1'>~{parseFloat(treasuryInfo.balance).toFixed(3) * 1.5} USD</p>
               </div>
               <div className="space-y-2 rounded-lg px-5 pb- pt-1 max-w-max">
                 <h1 className="text-gray-300 pl-3 pb-1 text-sm">Current Admins</h1>
